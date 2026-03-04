@@ -12,6 +12,7 @@ namespace WebRTCWrapper.Runtime
 
         UniTask<IPeer> Create();
         UniTask<IPeer> WithConfig(RTCConfiguration config);
+        UniTask<IPeer> WithCoroutineRunner(ICoroutineRunner runner);
         UniTask<IPeer> WithSignaling(ISignaling signaling);
         UniTask<IPeer> WithMedia(IMedia media);
         UniTask<IPeer> Finish();

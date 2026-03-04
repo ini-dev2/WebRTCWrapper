@@ -11,6 +11,12 @@ namespace WebRTCWrapper.Runtime
             return await peer.WithConfig(config);
         }
 
+        public static async UniTask<IPeer> WithCoroutineRunner(this UniTask<IPeer> task, ICoroutineRunner runner)
+        {
+            var peer = await task;
+            return await peer.WithCoroutineRunner(runner);
+        }
+
         public static async UniTask<IPeer> WithSignaling(this UniTask<IPeer> task, ISignaling signaling)
         {
             var peer = await task;

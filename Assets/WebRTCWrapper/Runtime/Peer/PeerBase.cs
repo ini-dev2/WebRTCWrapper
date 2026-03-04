@@ -6,11 +6,12 @@ using System.Collections.Generic;
 
 namespace WebRTCWrapper.Runtime
 {
-    public class PeerBase : MonoBehaviour, IPeer, IDisposable
+    public class PeerBase : IPeer, IDisposable
     {
         protected RTCPeerConnection _peer;
         protected ISignaling _signaling;
         protected List<IMedia> _medias = new();
+        protected ICoroutineRunner _corotineRunner;
 
         public event Action<string> OnIceSend;
         public event DelegateOnConnectionStateChange OnConnectionStateChange;
@@ -25,6 +26,12 @@ namespace WebRTCWrapper.Runtime
         public async UniTask<IPeer> WithConfig(RTCConfiguration config)
         {
             _peer.SetConfiguration(ref config);
+            return this;
+        }
+
+        public async UniTask<IPeer> WithCoroutineRunner(ICoroutineRunner runner)
+        {
+            _corotineRunner = runner;
             return this;
         }
 
@@ -70,7 +77,7 @@ namespace WebRTCWrapper.Runtime
             _peer.OnConnectionStateChange += OnConnectionStateChange;
             _peer.OnIceConnectionChange += OnIceConnectionChange;
 
-            StartCoroutine(WebRTC.Update());
+            _corotineRunner.StartCoroutine(WebRTC.Update());
 
             return this;
         }
